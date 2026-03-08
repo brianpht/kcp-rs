@@ -54,6 +54,7 @@ kcp-rs = { version = "0.1", features = ["small-buffers"] }  # Reduced memory for
 |---------|-------------|
 | `std` | Enable standard library support |
 | `small-buffers` | Use smaller buffer sizes (~88 KB vs ~705 KB) for testing |
+| `fec` | Enable Forward Error Correction (Reed-Solomon) for lossy networks |
 
 ## Quick Start
 
@@ -224,7 +225,13 @@ kcp-rs/
 │   ├── ring_buffer.rs  # Lock-free ring buffers
 │   ├── codec.rs        # Wire format encoding/decoding
 │   ├── time.rs         # Time utilities
-│   └── kcp.rs          # Main KCP implementation
+│   ├── kcp.rs          # Main KCP implementation
+│   └── fec/            # Forward Error Correction (feature-gated)
+│       ├── mod.rs      # FEC configuration and headers
+│       ├── gf256.rs    # GF(2^8) finite field arithmetic
+│       ├── encoder.rs  # Reed-Solomon encoder
+│       ├── decoder.rs  # Reed-Solomon decoder
+│       └── buffer.rs   # FEC send/receive buffers
 ├── benches/
 │   └── throughput.rs   # Performance benchmarks
 ├── tests/
@@ -300,6 +307,53 @@ pub struct SendSegment {
     pub data_offset: u32,
 }
 ```
+
+## Forward Error Correction (FEC)
+
+The `fec` feature enables Reed-Solomon error correction, allowing recovery from packet loss without retransmission. This is useful for high-loss networks or latency-critical applications.
+
+### FEC Configuration
+
+```rust
+use kcp_rs::fec::{FecConfig, FecEncoder, FecDecoder};
+
+// Balanced: k=4 data, m=2 parity (50% overhead, recover 2 losses)
+let balanced = FecConfig::balanced();
+
+// Low latency: k=2 data, m=1 parity (50% overhead, recover 1 loss)  
+let low_latency = FecConfig::low_latency();
+
+// High protection: k=8 data, m=4 parity (50% overhead, recover 4 losses)
+let high_protection = FecConfig::high_protection();
+
+// Bandwidth efficient: k=10 data, m=2 parity (20% overhead)
+let efficient = FecConfig::bandwidth_efficient();
+```
+
+### FEC Group Structure
+
+```
+Group: [D0] [D1] [D2] [D3] [P0] [P1]
+        └─── data shards ───┘ └─ parity ─┘
+             k = 4              m = 2
+
+Any k shards can reconstruct all k data shards.
+```
+
+### FEC Presets
+
+| Preset | k (data) | m (parity) | Overhead | Recovery |
+|--------|----------|------------|----------|----------|
+| `low_latency` | 2 | 1 | 50% | 1 loss |
+| `balanced` | 4 | 2 | 50% | 2 losses |
+| `high_protection` | 8 | 4 | 50% | 4 losses |
+| `bandwidth_efficient` | 10 | 2 | 20% | 2 losses |
+
+### Design Characteristics
+
+- **Zero allocation**: All FEC buffers preallocated at init
+- **Inline GF(2^8)**: Lookup table arithmetic for encoding/decoding
+- **Vandermonde matrix**: Systematic encoding for efficient recovery
 
 ## API Reference
 

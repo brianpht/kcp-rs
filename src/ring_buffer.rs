@@ -244,12 +244,12 @@ impl SendBuffer {
     /// Mark segment as acked
     #[inline]
     pub fn ack(&mut self, sn: Sequence) -> bool {
-        if let Some(seg) = self.get_mut(sn)
-            && seg.state == SegmentState::Sent
-        {
-            seg.state = SegmentState::Acked;
-            self.count = self.count.saturating_sub(1);
-            return true;
+        if let Some(seg) = self.get_mut(sn) {
+            if seg.state == SegmentState::Sent {
+                seg.state = SegmentState::Acked;
+                self.count = self.count.saturating_sub(1);
+                return true;
+            }
         }
         false
     }

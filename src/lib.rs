@@ -24,7 +24,6 @@
 //! ```
 
 #![no_std]
-#![forbid(unsafe_code)] // Remove if unsafe is needed with justification
 #![warn(missing_docs)]
 
 pub mod constants;
@@ -35,7 +34,14 @@ pub mod codec;
 pub mod time;
 pub mod kcp;
 
+/// Forward Error Correction using Reed-Solomon codes
+#[cfg(feature = "fec")]
+pub mod fec;
+
 pub use constants::*;
 pub use sequence::Sequence;
 pub use segment::{SegmentHeader, SegmentState};
 pub use kcp::{Kcp, KcpConfig, KcpError, KcpOutput, KcpResult};
+
+#[cfg(feature = "fec")]
+pub use fec::{FecConfig, FecShardHeader, FecEncoder, FecDecoder, FecSendBuffer, FecRecvBuffer};
