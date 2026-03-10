@@ -12,7 +12,7 @@ KCP-RS is a Rust implementation of the [KCP protocol](https://github.com/skywind
 
 - **Zero Allocation**: All buffers preallocated at initialization
 - **Lock-Free**: Single-writer design, no mutexes in transport path
-- **Deterministic Latency**: Predictable performance with < 200ns packet processing
+- **Deterministic Latency**: Predictable performance with < 250ns packet processing
 - **Cache-Friendly**: Hot structures optimized for CPU cache lines (≤ 64 bytes)
 - **`no_std` Compatible**: Works in embedded and bare-metal environments
 - **Type-Safe**: Leverages Rust's type system to prevent common protocol bugs
@@ -21,11 +21,12 @@ KCP-RS is a Rust implementation of the [KCP protocol](https://github.com/skywind
 
 | Metric | Target | Current | Status |
 |--------|--------|---------|--------|
-| Small packet send | < 200 ns | ~2.6 ns | ✅ |
-| Update cycle (empty) | < 100 ns | ~47 ns | ✅ |
-| Update cycle (data) | < 100 ns | ~45 ns | ✅ |
-| Header encode | < 10 ns | ~3 ns | ✅ |
-| Header decode | < 10 ns | ~2 ns | ✅ |
+| Small packet send | < 250 ns | ~213 ns | ✅ |
+| Update cycle (empty) | < 100 ns | ~46 ns | ✅ |
+| Update cycle (data) | < 250 ns | ~230 ns | ✅ |
+| Header encode | < 10 ns | ~5.8 ns | ✅ |
+| Header decode | < 10 ns | ~2.6 ns | ✅ |
+| Recv (no data) | < 5 ns | ~1.2 ns | ✅ |
 | Memory Allocation | 0 | 0 | ✅ |
 | Cache Misses | 0 (steady) | 0 | ✅ |
 

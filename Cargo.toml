@@ -1,7 +1,7 @@
 [package]
 name = "kcp-rs"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 description = "A Rust implementation of the KCP protocol, a reliable UDP-based protocol for real-time applications"
 keywords = ["networking", "udp", "reliable", "gamedev", "realtime"]
 categories = ["network-programming", "game-development"]
@@ -17,7 +17,7 @@ fec = []
 [dependencies]
 
 [dev-dependencies]
-criterion = { version = "0.5", default-features = false, features = ["cargo_bench_support"] }
+criterion = { version = "0.8.2", default-features = false, features = ["cargo_bench_support"] }
 
 # Tests run with small-buffers to avoid stack overflow
 [[test]]

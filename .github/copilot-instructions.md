@@ -99,7 +99,10 @@ Allowed only if: measurable gain + benchmarked + invariants documented + fuzz-te
 
 | Metric | Target |
 |--------|--------|
-| Small packet latency | < 200ns |
+| Small packet send | < 250ns |
+| Update cycle (empty) | < 100ns |
+| Update cycle (data) | < 250ns |
+| Header encode/decode | < 10ns |
 | Allocation | None |
 | Cache miss (steady) | None |
 

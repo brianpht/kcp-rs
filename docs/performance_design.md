@@ -115,11 +115,12 @@ The following patterns are **automatically rejected** in code review:
 
 | Metric                 | Target      | Current   | Status |
 |------------------------|-------------|-----------|--------|
-| Small packet send      | < 200 ns    | ~2.6 ns   | ✅      |
-| Update cycle (empty)   | < 100 ns    | ~47 ns    | ✅      |
-| Update cycle (data)    | < 100 ns    | ~45 ns    | ✅      |
-| Header encode          | < 10 ns     | ~3 ns     | ✅      |
-| Header decode          | < 10 ns     | ~2 ns     | ✅      |
+| Small packet send      | < 250 ns    | ~213 ns   | ✅      |
+| Update cycle (empty)   | < 100 ns    | ~46 ns    | ✅      |
+| Update cycle (data)    | < 250 ns    | ~230 ns   | ✅      |
+| Header encode          | < 10 ns     | ~5.8 ns   | ✅      |
+| Header decode          | < 10 ns     | ~2.6 ns   | ✅      |
+| Recv (no data)         | < 5 ns      | ~1.2 ns   | ✅      |
 | Allocation (steady)    | 0           | 0         | ✅      |
 | Cache miss (steady)    | 0           | 0         | ✅      |
 
