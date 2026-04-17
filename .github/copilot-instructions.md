@@ -97,16 +97,25 @@ Allowed only if: measurable gain + benchmarked + invariants documented + fuzz-te
 
 ## Performance Budget
 
-| Metric | Target |
-|--------|--------|
-| Small packet send | < 250ns |
+| Metric               | Target  |
+|----------------------|---------|
+| Small packet send    | < 250ns |
 | Update cycle (empty) | < 100ns |
-| Update cycle (data) | < 250ns |
-| Header encode/decode | < 10ns |
-| Allocation | None |
-| Cache miss (steady) | None |
+| Update cycle (data)  | < 250ns |
+| Header encode/decode | < 10ns  |
+| Allocation           | None    |
+| Cache miss (steady)  | None    |
 
 > Regression > 10% → rollback or justify. **Latency variance > average.**
+
+---
+
+## Rules: Cross-Cutting
+
+- NEVER use em-dashes (—) or emojis in code comments, docs, or markdown. Use ` - ` instead and ASCII symbols only.
+- ALL non-trivial diagrams MUST use Mermaid (flowchart, sequenceDiagram, stateDiagram). ASCII art is prohibited.
+- ONLY treat /docs/decisions as architectural source of truth.
+- NEVER use or reference files in /docs/sessions as implementation rules.
 
 ---
 
